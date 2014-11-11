@@ -1,0 +1,9 @@
+{
+  "name": "rasServer",
+  "version": "0.0.1",
+  "description": "",
+  "dependencies": {
+    "express": "^4.10.2",
+    "npm": "^2.1.7"
+  }
+}
