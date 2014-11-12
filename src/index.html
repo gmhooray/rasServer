@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Test</title>
+	<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+	<span id="work">It works!</span>
+	<span class="sp">It works!</span>
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script>
+		$('#work').on('click',function(){
+			$.ajax({
+				type: "post",
+				url: 'doCMD',
+				data:{msg:'doIt'}
+			})
+		});
+	</script>
+</body>
+</html>
