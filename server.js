@@ -57,10 +57,17 @@ app.get('/', function(req, res){
     });
 });
 
-app.post('/doCMD', function(req, res){
-    visitPeople += 1;
-    gServer.cmd('node',['-v']);
-    res.send(visitPeople.toString());
+
+//osascript -e 'tell app \"System Events\" to display dialog "Hello World"'
+
+app.post('/doUPKEY', function(req, res){
+    gServer.cmd('osascript',['-e', 'tell app \"System Events\" to key code 126']);
+    res.end();
+});
+
+app.post('/doDOWNKEY', function(req, res){
+    gServer.cmd('osascript',['-e', 'tell app \"System Events\" to key code 125']);
+    res.end();
 });
 
 app.listen(port, function() {

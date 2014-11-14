@@ -1,2 +1,3 @@
-span{color:#1fbc02}
-.sp{background: url('../img/sp_member_20141002.png')}
+
+#up{display:inline-block;width:100px;height:100px;line-height:100px;text-align:center;font-family:Helvetica;border:1px solid #1fbc02;border-radius:7px}
+#down{display:inline-block;width:100px;height:100px;line-height:100px;text-align:center;font-family:Helvetica;border:1px solid #1fbc02;border-radius:7px}

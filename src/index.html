@@ -2,22 +2,49 @@
 <html lang="ko">
 <head>
 	<meta charset="UTF-8">
-	<title>Test</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <title>Test</title>
 	<link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
-	<span id="work">It works!</span>
-	<span class="sp">It works!</span>
+    <h1>Gman's Controller</h1>
+    <div id="up">Prev</div>
+    <div id="down">Next</div>
+
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<script>
-		$('#work').on('click',function(){
-			$.ajax({
-				type: "post",
-				url: 'doCMD',
-				data:{msg:'doIt'}
-			})
-		});
+
+        var gEvent = function(){this.$init.apply(this,arguments)}
+
+        gEvent.prototype={
+            $init:function(){
+                this.ePressUpKey();
+                this.ePressDownKey();
+            },
+            ePressUpKey:function(){
+                $('#up').on('click',function(){
+                    $.ajax({
+                        type: "post",
+                        url: 'doUPKEY'
+                    })
+                });
+            },
+            ePressDownKey:function(){
+                $('#down').on('click',function(){
+                    $.ajax({
+                        type: "post",
+                        url: 'doDOWNKEY'
+                    })
+                });
+            }
+        }
+
+
+        $(document).ready(function(){
+            new gEvent()
+        })
+
 	</script>
 </body>
 </html>
