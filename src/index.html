@@ -8,41 +8,38 @@
 </head>
 <body>
     <h1>Gman's Controller</h1>
-    <div id="up">Prev</div>
-    <div id="down">Next</div>
+    <div id="btn_prev">Prev</div>
+    <div id="btn_next">Next</div>
 
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 	<script>
-
+		var socket = io($(location).attr('host'));
         var gEvent = function(){this.$init.apply(this,arguments)}
 
         gEvent.prototype={
             $init:function(){
-                this.ePressUpKey();
-                this.ePressDownKey();
+	            this._attachedEvent(socket);
             },
-            ePressUpKey:function(){
-                $('#up').on('click',function(){
-                    $.ajax({
-                        type: "post",
-                        url: 'doUPKEY'
-                    })
+	        _attachedEvent: function(socket){
+				this._ePressPrevKey(socket);
+		        this._ePressNextKey(socket);
+	        },
+	        _ePressPrevKey:function(socket,sID){
+                $('#btn_prev').on('click',function(){
+					socket.emit('pushPrev',{key:'Prev'})
                 });
             },
-            ePressDownKey:function(){
-                $('#down').on('click',function(){
-                    $.ajax({
-                        type: "post",
-                        url: 'doDOWNKEY'
-                    })
+	        _ePressNextKey:function(socket,sID){
+                $('#btn_next').on('click',function(){
+	                socket.emit('pushNext',{key:'Next'})
                 });
             }
         }
 
-
         $(document).ready(function(){
-            new gEvent()
+            new gEvent();
         })
 
 	</script>

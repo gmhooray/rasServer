@@ -1,16 +1,15 @@
-
-/* Express Configuration */
 var express = require('express');
 var app = express();
-var port = Number(process.env.PORT || 5000);
-var visitPeople = 0;
-
-app.use('/img', express.static(__dirname + '/src/img/'));
-app.use('/css', express.static(__dirname + '/src/css/'));
-app.use('/js', express.static(__dirname + '/src/js/'));
+var server = require('http').Server(app);
+var io = require('socket.io').listen(server);
+var port = Number(process.env.PORT || 20787);
 
 /* Node Child_process */
-var spawn = require('child_process').spawn;
+var cp = require('child_process');
+var spawn = cp.spawn;
+
+var path = require('path');
+app.use(express.static(path.join( __dirname , 'src/')));
 
 var gman = function(){this.$init.apply(this,arguments)};
 gman.prototype = {
@@ -36,40 +35,30 @@ gman.prototype = {
 
 var gServer = new gman();
 
-app.get('/', function(req, res){
-    var options = {
-        root: __dirname + '/src/',
-        dotfiles: 'deny',
-        headers: {
-            'x-timestamp': Date.now(),
-            'x-sent': true
-        }
-    };
-
-    res.sendFile('index.html', options, function (err) {
-        if (err) {
-            console.log(err);
-            res.status(err.status).end();
-        }
-        else {
-            console.log('Sent:','index.html');
-        }
-    });
+app.get('/', function (req, res) {
+    res.sendFile(__dirname + '/index.html');
 });
 
+/* socket.io event */
+io.on('connection', function(socket){
+    socket.emit('news', { hello: 'world' });
+    if( process.platform  == "win32" ){
+        socket.on('pushPrev', function(data){
+            gServer.cmd('./tool/WinSendKeys/WinSendKeys.exe',['-t','2000','-w','[ACTIVE]','{UP}']);
+        })
+        socket.on('pushNext', function(data){
+            gServer.cmd('./tool/WinSendKeys/WinSendKeys.exe',['-t','2000','-w','[ACTIVE]','{DOWN}']);
+        })
+    }else if(process.platform  == "darwin"){
+        socket.on('pushPrev', function(data) {
+            gServer.cmd('osascript',['-e', 'tell app \"System Events\" to key code 126']);
+        })
+        socket.on('pushNext', function(data){
+            gServer.cmd('osascript',['-e', 'tell app \"System Events\" to key code 125']);
+        })
+    }
+})
 
-//osascript -e 'tell app \"System Events\" to display dialog "Hello World"'
-
-app.post('/doUPKEY', function(req, res){
-    gServer.cmd('osascript',['-e', 'tell app \"System Events\" to key code 126']);
-    res.end();
-});
-
-app.post('/doDOWNKEY', function(req, res){
-    gServer.cmd('osascript',['-e', 'tell app \"System Events\" to key code 125']);
-    res.end();
-});
-
-app.listen(port, function() {
+server.listen(port, function() {
     console.log("Listening on " + port);
 });
