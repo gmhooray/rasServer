@@ -4,6 +4,18 @@ var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var port = Number(process.env.PORT || 20787);
 
+var os = require('os');
+var ifaces = os.networkInterfaces();
+for (var dev in ifaces) {
+    var alias=0;
+    ifaces[dev].forEach(function(details){
+        if (details.family=='IPv4') {
+            console.log(dev+(alias?':'+alias:''),details.address);
+            ++alias;
+        }
+    });
+}
+
 /* Node Child_process */
 var cp = require('child_process');
 var spawn = cp.spawn;
