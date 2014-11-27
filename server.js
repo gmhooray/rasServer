@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
-var port = Number(process.env.PORT || 20787);
+var port = Number(process.env.PORT || 33551);
 
 var os = require('os');
 var ifaces = os.networkInterfaces();
@@ -54,21 +54,7 @@ app.get('/', function (req, res) {
 /* socket.io event */
 io.on('connection', function(socket){
     socket.emit('news', { hello: 'world' });
-    if( process.platform  == "win32" ){
-        socket.on('pushPrev', function(data){
-            gServer.cmd('./tool/WinSendKeys/WinSendKeys.exe',['-t','2000','-w','[ACTIVE]','{UP}']);
-        })
-        socket.on('pushNext', function(data){
-            gServer.cmd('./tool/WinSendKeys/WinSendKeys.exe',['-t','2000','-w','[ACTIVE]','{DOWN}']);
-        })
-    }else if(process.platform  == "darwin"){
-        socket.on('pushPrev', function(data) {
-            gServer.cmd('osascript',['-e', 'tell app \"System Events\" to key code 126']);
-        })
-        socket.on('pushNext', function(data){
-            gServer.cmd('osascript',['-e', 'tell app \"System Events\" to key code 125']);
-        })
-    }
+
 })
 
 server.listen(port, function() {

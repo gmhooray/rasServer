@@ -12,3 +12,5 @@ em,address{font-style:normal}
 a{color:inherit;text-decoration:none}
 img{vertical-align:top}
 
+#wrap{position:relative}
+.iphone{position:relative;background:url(../img/bg2.png) no-repeat;background-size:100% 100%}
