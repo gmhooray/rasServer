@@ -5,15 +5,35 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <title>Test</title>
 	<link rel="stylesheet" href="css/style.css"/>
+    <script src="js/jquery.js"></script>
+    <script>
+        $(document).ready({
+
+        })
+    </script>
 </head>
 <body>
-    <h1>Gman's Controller</h1>
-    <div id="btn_prev">Prev</div>
-    <div id="btn_next">Next</div>
+    <div id="header"></div>
+    <div id="container">
+        <button id="more">aaaaa</button>
+        <img src="files/test/P9124231.JPG" width="500" height="500">
+    </div>
+    <div id="footer">
 
-	<script src="js/jquery.js"></script>
+    </div>
+
     <!--<script src="/socket.io/socket.io.js"></script>-->
 	<script>
+        $('#more').on('click',function(){
+            $.ajax({
+                type:'POST',
+                url: "/getList",
+                data: { index : 1 }
+            }).done(function(data) {
+                console.log(data);
+            });
+        })
+
         /*var socket = io($(location).attr('host'));
         var gEvent = function(){this.$init.apply(this,arguments)}
 

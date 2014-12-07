@@ -5,6 +5,7 @@
   "dependencies": {
     "express": "^4.10.2",
     "npm": "^2.1.7",
+    "serve-index": "^1.5.2",
     "socket.io": "^1.2.0"
   }
 }
