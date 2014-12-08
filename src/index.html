@@ -2,26 +2,53 @@
 <html lang="ko">
 <head>
 	<meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Test</title>
-	<link rel="stylesheet" href="css/style.css"/>
-    <script src="js/jquery.js"></script>
-    <script>
-        $(document).ready({
-
-        })
-    </script>
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/fotorama.css"/>
+    <script src="js/fotorama.js"></script>
+    <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
     <div id="header"></div>
     <div id="container">
-        <button id="more">aaaaa</button>
-        <img src="files/test/P9124231.JPG" width="500" height="500">
+        <div id="fotorama" class="fotorama" data-auto="false">
+            <img src="files/test/bizcoin_info.gif" width="200" height="200">
+            <img src="files/test/btn_confirm3.png" width="200" height="200">
+            <img src="files/test/issue1.PNG" width="200" height="200">
+        </div>
     </div>
     <div id="footer">
 
     </div>
+    <script>
+        $(document).ready(function(){
+            // 1. Initialize fotorama manually.
+            var $fotoramaDiv = $('#fotorama').fotorama();
 
+            // 2. Get the API object.
+            var fotorama = $fotoramaDiv.data('fotorama');
+
+            // 3. Inspect it in console.
+            console.log(fotorama);
+
+            $('.fotorama').on('fotorama:ready', function (e, fotorama) {
+
+                console.log(e.type, fotorama.activeIndex);
+            });
+            $('.fotorama').on('fotorama:show fotorama:showend',
+                    function (e, fotorama, extra) {
+                        if(fotorama.activeIndex == (fotorama.size-1)){
+                            fotorama.push({img: 'files/test/issue1.PNG', thumb: 'files/test/issue1.PNG'});
+                        }
+//                        debugger;
+                        console.log(fotorama.activeIndex);
+//                        console.log(e.type + (extra.user ? ' after user’s touch' : ''));
+                        console.log('transition duration: ' + extra.time);
+                    }
+            );
+        })
+    </script>
     <!--<script src="/socket.io/socket.io.js"></script>-->
 	<script>
         $('#more').on('click',function(){
