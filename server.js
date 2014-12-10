@@ -30,9 +30,12 @@ if (cluster.isMaster) {
 
     app.post('/getList', function(req,res){
         fs.readdir("src/files/test", function (err, filenames) {
-            var i;
+            // req 해당 인덱스 받고
+            // 전체 lentgh 보다 작을때까지 포문을 5번 돈다
+            // 배열에 파일명을 차례대로 넣은다음에
+            // 해당 배열 json 으로 리턴
             console.log(req.param('index'));
-            for (i = 0; i < filenames.length; i++) {
+            for (var i = 0; i < filenames.length; i++) {
                 console.log(filenames[i]);
             }
             res.json({0:filenames[0],1:filenames[1],2:filenames[2]});

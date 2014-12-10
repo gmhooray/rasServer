@@ -36,6 +36,9 @@
             });
             $('.fotorama').on('fotorama:show fotorama:showend',
                     function (e, fotorama, extra) {
+                        // ajax 를 통해 배열이 넘어오면,
+                        // 해당 배열 길이만큼 for문을 돌면서 fotorama 데이터 넣기
+                        //
                         if(fotorama.size-1<10) {
                             if (fotorama.activeIndex == (fotorama.size - 1)) {
                                 fotorama.push({img: 'https://images.bill.naver.net/BL/pay2/h1_account.gif', thumb: 'files/test/ico_sub.png'})
