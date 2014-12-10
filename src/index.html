@@ -10,66 +10,78 @@
     <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
-    <div id="header"></div>
-    <div id="container">
-        <div id="fotorama" class="fotorama" data-auto="false">
-            <img src="files/test/bizcoin_info.gif" width="200" height="200">
-            <img src="files/test/btn_confirm3.png" width="200" height="200">
-            <img src="files/test/issue1.PNG" width="200" height="200">
-        </div>
-        <button id="reset">fomular</button>
+<div id="header"></div>
+<div id="container">
+    <div id="fotorama" class="fotorama" data-auto="false" data-allowfullscreen="true">
+
     </div>
-    <div id="footer"></div>
-    <script>
-        $(document).ready(function(){
-            // 1. Initialize fotorama manually.
-            var $fotoramaDiv = $('#fotorama').fotorama();
+    <button id="reset">fomular</button>
+</div>
+<div id="footer"></div>
+<script>
 
-            // 2. Get the API object.
-            var fotorama = $fotoramaDiv.data('fotorama');
+    $(document).ready(function(){
+        // 1. Initialize fotorama manually.
+        var $fotoramaDiv = $('#fotorama').fotorama();
 
-            // 3. Inspect it in console.
-            console.log(fotorama);
+        // 2. Get the API object.
+        var fotorama = $fotoramaDiv.data('fotorama');
 
-            $('.fotorama').on('fotorama:ready', function (e, fotorama) {
-                console.log(e.type, fotorama.activeIndex);
-            });
-            $('.fotorama').on('fotorama:show fotorama:showend',
-                    function (e, fotorama, extra) {
-                        // ajax 를 통해 배열이 넘어오면,
-                        // 해당 배열 길이만큼 for문을 돌면서 fotorama 데이터 넣기
-                        //
-                        if(fotorama.size-1<10) {
-                            if (fotorama.activeIndex == (fotorama.size - 1)) {
-                                fotorama.push({img: 'https://images.bill.naver.net/BL/pay2/h1_account.gif', thumb: 'files/test/ico_sub.png'})
-                                fotorama.push({img: 'https://images.bill.naver.net/BL/pay2/txt_navercash.gif', thumb: 'files/test/ico_sub.png'})
-                                fotorama.push({img: 'https://images.bill.naver.net/BL/pay2/ico_new.png', thumb: 'files/test/ico_sub.png'});
-                            }
-                        }
-//                        debugger;
-                        console.log(fotorama.activeIndex);
-//                        console.log(e.type + (extra.user ? ' after user’s touch' : ''));
-                        console.log('transition duration: ' + extra.time);
-                    }
-            );
-            $('#reset').on('click', function(){
-                debugger;
-            })
-        })
-    </script>
-    <!--<script src="/socket.io/socket.io.js"></script>-->
-	<script>
-        $('#more').on('click',function(){
+        function getImage(nCurrentIndex, sDir){
             $.ajax({
                 type:'POST',
                 url: "/getList",
-                data: { index : 1 }
-            }).done(function(data) {
-                console.log(data);
-            });
-        })
+                data: {index : nCurrentIndex}
+            }).done(function(data){
+                for(var i = 0; i < data.aFilenames.length; i++){
+                    fotorama.push({img: sDir + data.aFilenames[i] , thumb: data.aFilenames[i]});
+                }
 
-        /*var socket = io($(location).attr('host'));
+            })
+        }
+
+        getImage(0, 'files/test/');
+        $('.fotorama').on('fotorama:show', function (e, fotorama, extra) {
+                    debugger;
+                    if(fotorama.activeIndex >= (fotorama.size - 1)){
+                        getImage(fotorama.size+1, 'files/test/');
+                    }
+
+                    // ajax 를 통해 배열이 넘어오면,
+                    // 해당 배열 길이만큼 for문을 돌면서 fotorama 데이터 넣기
+//                    //
+//                    if(fotorama.size-1<10) {
+//                        if (fotorama.activeIndex == (fotorama.size - 1)) {
+//                            fotorama.push({img: 'https://images.bill.naver.net/BL/pay2/h1_account.gif', thumb: 'files/test/ico_sub.png'})
+//                            fotorama.push({img: 'https://images.bill.naver.net/BL/pay2/txt_navercash.gif', thumb: 'files/test/ico_sub.png'})
+//                            fotorama.push({img: 'https://images.bill.naver.net/BL/pay2/ico_new.png', thumb: 'files/test/ico_sub.png'});
+//                        }
+//                    }
+//                        debugger;
+                    console.log(fotorama.activeIndex);
+//                        console.log(e.type + (extra.user ? ' after user’s touch' : ''));
+                    console.log('transition duration: ' + extra.time);
+                }
+        )
+
+        $('#reset').on('click', function(){
+            debugger;
+        })
+    })
+</script>
+<!--<script src="/socket.io/socket.io.js"></script>-->
+<script>
+    $('#more').on('click',function(){
+        $.ajax({
+            type:'POST',
+            url: "/getList",
+            data: { index : 1 }
+        }).done(function(data) {
+            console.log(data);
+        });
+    })
+
+    /*var socket = io($(location).attr('host'));
         var gEvent = function(){this.$init.apply(this,arguments)}
 
         gEvent.prototype = {
@@ -95,7 +107,6 @@
         $(document).ready(function(){
             new gEvent();
         })*/
-
-	</script>
+</script>
 </body>
 </html>

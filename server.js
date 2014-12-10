@@ -7,7 +7,10 @@ var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var port = Number(process.env.PORT || 7777);
 var numCPUs = os.cpus().length;
-var fs = require("fs")
+var fs = require("fs");
+var path = require('path');
+var bodyParser = require('body-parser');
+var multer = require('multer');
 
 /* Node Child_process */
 var cp = require('child_process');
@@ -17,28 +20,34 @@ if (cluster.isMaster) {
     for (var i = 0; i < numCPUs; i++) {
         cluster.fork();
     }
-
-    cluster.on('exit', function(worker, code, signal) {
+    cluster.on('exit', function (worker, code, signal) {
         console.log('worker ' + worker.process.pid + ' died');
-    });
+    })
+
 } else {
     // Workers can share any TCP connection
     // In this case its a HTTP server
-    var path = require('path');
+    app.use(bodyParser.json()); // for parsing application/json
+    app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+    app.use(multer()); // for parsing multipart/form-data
     app.use(express.static(path.join(__dirname, 'src/')));
-//    app.use('/files', serveIndex('src/files', {'icons': true}))
 
     app.post('/getList', function(req,res){
         fs.readdir("src/files/test", function (err, filenames) {
             // req 해당 인덱스 받고
-            // 전체 lentgh 보다 작을때까지 포문을 5번 돈다
-            // 배열에 파일명을 차례대로 넣은다음에
-            // 해당 배열 json 으로 리턴
+            var nCurrentIndex = Number(req.param('index'));
             console.log(req.param('index'));
-            for (var i = 0; i < filenames.length; i++) {
-                console.log(filenames[i]);
+            var aFilenames = [];
+
+            for (var i = 0; i < 3; i++) {
+                if(nCurrentIndex + i < filenames.length) {
+                    aFilenames.push(filenames[nCurrentIndex + i])
+                }else{
+                    break;
+                }
             }
-            res.json({0:filenames[0],1:filenames[1],2:filenames[2]});
+
+            res.json({aFilenames:aFilenames});
         });
 
     })
