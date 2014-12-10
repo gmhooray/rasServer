@@ -7,7 +7,6 @@ var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var port = Number(process.env.PORT || 7777);
 var numCPUs = os.cpus().length;
-var serveIndex = require('serve-index');
 var fs = require("fs")
 
 /* Node Child_process */

@@ -17,10 +17,9 @@
             <img src="files/test/btn_confirm3.png" width="200" height="200">
             <img src="files/test/issue1.PNG" width="200" height="200">
         </div>
+        <button id="reset">fomular</button>
     </div>
-    <div id="footer">
-
-    </div>
+    <div id="footer"></div>
     <script>
         $(document).ready(function(){
             // 1. Initialize fotorama manually.
@@ -33,13 +32,16 @@
             console.log(fotorama);
 
             $('.fotorama').on('fotorama:ready', function (e, fotorama) {
-
                 console.log(e.type, fotorama.activeIndex);
             });
             $('.fotorama').on('fotorama:show fotorama:showend',
                     function (e, fotorama, extra) {
-                        if(fotorama.activeIndex == (fotorama.size-1)){
-                            fotorama.push({img: 'files/test/issue1.PNG', thumb: 'files/test/issue1.PNG'});
+                        if(fotorama.size-1<10) {
+                            if (fotorama.activeIndex == (fotorama.size - 1)) {
+                                fotorama.push({img: 'https://images.bill.naver.net/BL/pay2/h1_account.gif', thumb: 'files/test/ico_sub.png'})
+                                fotorama.push({img: 'https://images.bill.naver.net/BL/pay2/txt_navercash.gif', thumb: 'files/test/ico_sub.png'})
+                                fotorama.push({img: 'https://images.bill.naver.net/BL/pay2/ico_new.png', thumb: 'files/test/ico_sub.png'});
+                            }
                         }
 //                        debugger;
                         console.log(fotorama.activeIndex);
@@ -47,6 +49,9 @@
                         console.log('transition duration: ' + extra.time);
                     }
             );
+            $('#reset').on('click', function(){
+                debugger;
+            })
         })
     </script>
     <!--<script src="/socket.io/socket.io.js"></script>-->
@@ -64,7 +69,7 @@
         /*var socket = io($(location).attr('host'));
         var gEvent = function(){this.$init.apply(this,arguments)}
 
-        gEvent.prototype={
+        gEvent.prototype = {
             $init:function(){
 	            this._attachedEvent(socket);
             },
