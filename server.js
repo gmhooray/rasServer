@@ -1,19 +1,20 @@
-
-var cluster = require('cluster');
-var os = require('os');
+/* require Module */
+var bodyParser = require('body-parser');
+/* Node Child_process */
+var cp = require('child_process');
 var express = require('express');
+var cluster = require('cluster');
+var multer = require('multer');
+var path = require('path');
+var os = require('os');
+var fs = require("fs");
+
+/* Server port */
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var port = Number(process.env.PORT || 7777);
 var numCPUs = os.cpus().length;
-var fs = require("fs");
-var path = require('path');
-var bodyParser = require('body-parser');
-var multer = require('multer');
-
-/* Node Child_process */
-var cp = require('child_process');
 
 if (cluster.isMaster) {
     // Fork workers.
@@ -34,15 +35,18 @@ if (cluster.isMaster) {
 
     app.post('/getList', function(req,res){
         fs.readdir("src/files/test", function (err, filenames) {
-            // req 해당 인덱스 받고
             var nCurrentIndex = Number(req.param('index'));
-            console.log(req.param('index'));
             var aFilenames = [];
-
-            for (var i = 0; i < 3; i++) {
-                if(nCurrentIndex + i < filenames.length) {
-                    aFilenames.push(filenames[nCurrentIndex + i])
-                }else{
+            var nGetStartIndex = 0;
+            if(nCurrentIndex == 0){
+                nGetStartIndex = nCurrentIndex;
+            }else{
+                nGetStartIndex = nCurrentIndex + 3;
+            }
+            for (var i = 0; i < 5; i++) {
+                if(nGetStartIndex + i < filenames.length) {
+                    aFilenames.push(filenames[nGetStartIndex + i ])
+                } else {
                     break;
                 }
             }
