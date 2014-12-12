@@ -14,3 +14,4 @@ img{vertical-align:top}
 
 /* COMMON HIDE */
 .blind{position:absolute;visibility:hidden;overflow:hidden;width:0;height:0;padding:0;margin:0;font-size:0;line-height:0}
+.fotorama{width:100%;height:100%}
